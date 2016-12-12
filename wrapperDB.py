@@ -6,13 +6,14 @@ def insert_record(db, name, year):
 
 
 # select all publications
-def select_pb(db, bot, id):
+def select_pb(db):
 
     cur = db.cursor()
     cur.execute('SELECT `Название публикации` FROM main')
     db.commit()
 
+    answer = list()
     for str_name in cur:
-        print(str_name[0])
+        answer.append(str_name[0])
 
-    # return first_name
+    return answer

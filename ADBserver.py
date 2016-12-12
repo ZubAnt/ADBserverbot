@@ -40,6 +40,25 @@ def my_logger(message, answer, logfile):
     logfile.write("Answer = " + answer + "\n")
 
 
+def my_send_message(id_in, data_list_in):
+    if not data_list_in:
+        bot.send_message(id_in, "Пусто", reply_markup=keyboard_main)
+    else:
+        cnt = 1
+        answer = ""
+        size = len(data_list_in)
+        for data in data_list_in:
+            answer += data + "\n"
+            if cnt % 10 == 0 or cnt == size:
+                if cnt == size:
+                    bot.send_message(id_in, answer, reply_markup=keyboard_main)
+                else:
+                    bot.send_message(id_in, answer + '\nОсталось ' + str(size - cnt) + 'записей',
+                                     reply_markup=keyboard_main)
+                answer = ""
+            cnt += 1
+
+
 @bot.message_handler(commands=['start'])
 def print_start(message):
     bot.send_message(message.chat.id, "Let's go!", reply_markup=keyboard_main)
@@ -48,8 +67,10 @@ def print_start(message):
 @bot.message_handler(commands=['get_publications'])
 def print_settings(message):
     if message.chat.id == admin.admin_id:
+
         bot.send_message(message.chat.id, "Ваш запрос в обработке", reply_markup=keyboard_main)
-        select_pb(db, bot, message.chat.id)
+        data_list = select_pb(db)
+        my_send_message(message.chat.id, data_list)
     else:
         bot.send_message(message.chat.id, admin.perm_den + "\nЗапросите права доступа у администрации",
                          reply_markup=keyboard_main)
