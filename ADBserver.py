@@ -92,24 +92,17 @@ def print_start(message):
 
 @bot.message_handler(commands=['get_publications'])
 def print_settings(message):
-    if message.chat.id == admin.admin_id:
 
-        bot.send_message(message.chat.id, "Ваш запрос в обработке", reply_markup=keyboard_main)
-        data_list = select_pb(db)
-        my_send_message_all(message.chat.id, data_list)
-    else:
-        bot.send_message(message.chat.id, admin.perm_den + "\nЗапросите права доступа у администрации",
-                         reply_markup=keyboard_main)
+    bot.send_message(message.chat.id, "Ваш запрос в обработке", reply_markup=keyboard_main)
+    data_list = select_pb(db)
+    my_send_message_all(message.chat.id, data_list)
 
 
 @bot.message_handler(commands=['get_publications_by_year'])
 def print_settings(message):
-    if message.chat.id == admin.admin_id:
-        flag_insert_year[message.chat.id] = True
-        bot.send_message(message.chat.id, "Введите год издания", reply_markup=keyboard_year)
-    else:
-        bot.send_message(message.chat.id, admin.perm_den + "\nЗапросите права доступа у администрации",
-                         reply_markup=keyboard_main)
+
+    flag_insert_year[message.chat.id] = True
+    bot.send_message(message.chat.id, "Введите год издания", reply_markup=keyboard_year)
 
 
 @bot.message_handler(content_types=['text'])
